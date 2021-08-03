@@ -20,6 +20,7 @@ import ClaimButton from '../components/ClaimButton';
 import PreLoadIndicator from '../components/PreLoadIndicator';
 import { Text } from '../components/Shared';
 import { SET_TOKENS_REQUESTED } from '../redux/actions/tokens';
+import { FaGithub } from 'react-icons/fa';
 
 interface Props {
   onClickConnectWallet: (e: React.SyntheticEvent) => void;
@@ -198,6 +199,9 @@ const Claim: React.FC<Props> = ({}) => {
       </ClaimBody>
 
       <ClaimFooter>
+        <Icon href={'https://github.com/SiennaNetwork/claim'} target="_blank" noreferrer>
+          <FaGithub size={24} />
+        </Icon>
         <ClaimButton
           text={
             nextButtonLoading ? (
@@ -240,6 +244,18 @@ const Claim: React.FC<Props> = ({}) => {
 };
 
 export default Claim;
+
+const Icon = styled.a`
+  position: absolute;
+  bottom: 15px;
+  left: 30px;
+  text-decoration: none;
+  color: inherit;
+  &:hover {
+    color: inherit;
+    opacity: 0.7;
+  }
+`;
 
 const Img = styled.img``;
 
