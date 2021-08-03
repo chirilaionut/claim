@@ -199,7 +199,7 @@ const Claim: React.FC<Props> = ({}) => {
       </ClaimBody>
 
       <ClaimFooter>
-        <Icon href={'https://github.com/SiennaNetwork/claim'} target="_blank" noreferrer>
+        <Icon href={'https://github.com/SiennaNetwork/claim'} target="_blank">
           <FaGithub size={24} />
         </Icon>
         <ClaimButton
@@ -246,9 +246,9 @@ const Claim: React.FC<Props> = ({}) => {
 export default Claim;
 
 const Icon = styled.a`
-  position: absolute;
-  bottom: 15px;
-  left: 30px;
+  position: fixed;
+  bottom: 10px;
+  left: 40px;
   text-decoration: none;
   color: inherit;
   &:hover {
@@ -276,6 +276,7 @@ const ClaimTopNavBar = styled(Row)`
 `;
 
 const ClaimTopNavBarLeft = styled(Col)`
+  padding-left: 0;
   background: ${defaultColors.white};
 `;
 
