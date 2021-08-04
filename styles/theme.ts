@@ -1,4 +1,3 @@
-import { rgba } from 'polished';
 import { breakpoints } from './breakpoints';
 
 export const defaultColors = {
@@ -31,14 +30,10 @@ const colors = {
   stableBlue: defaultColors.stableBlue,
   disabledBlue: defaultColors.disabledBlue,
   light: defaultColors.white,
-  lightShade: rgba(defaultColors.white, 0.75),
   dark: defaultColors.dark,
-  darkShade: rgba(defaultColors.dark, 0.75),
   ash: defaultColors.ash,
   bg: defaultColors.white,
   bgInverted: defaultColors.blackStone80,
-  border: rgba(defaultColors.ash, 0.115),
-  shadow: rgba(defaultColors.ash, 0.175),
   heading: defaultColors.primary,
   text: defaultColors.primary,
   textInverted: defaultColors.white,
@@ -61,14 +56,10 @@ const colors = {
       stableBlue: defaultColors.stableBlue,
       disabledBlue: defaultColors.disabledBlue,
       light: defaultColors.white,
-      lightShade: rgba(defaultColors.white, 0.75),
       dark: defaultColors.dark,
-      darkShade: rgba(defaultColors.dark, 0.75),
       ash: defaultColors.ash,
       bg: defaultColors.blackStone90,
       bgInverted: defaultColors.white,
-      border: rgba(defaultColors.ash, 0.115),
-      shadow: rgba(defaultColors.ash, 0.175),
       heading: defaultColors.white,
       text: defaultColors.white,
       textInverted: defaultColors.primary,

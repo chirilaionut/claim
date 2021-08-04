@@ -9,16 +9,12 @@ const CloseIcon = styled.img`
   pointer-events: initial;
 `;
 
-interface TheDrawerWrapperProps {
+interface Props {
   onClose: () => void;
   visible: boolean;
-  children: React.ReactNode;
   placement?: string;
-  width?: string;
-  title?: React.ReactElement;
-  style?: React.CSSProperties;
 }
-const SideDrawer = ({ onClose, visible, width = '100%', children }: TheDrawerWrapperProps) => {
+const SideDrawer: React.FC<Props> = ({ onClose, visible, children }) => {
   return (
     <Drawer
       placement="right"
@@ -29,9 +25,8 @@ const SideDrawer = ({ onClose, visible, width = '100%', children }: TheDrawerWra
       mask
       maskClosable
       maskStyle={{ background: 'transparent', position: 'fixed' }}
-      width={width}
+      width="280px"
       destroyOnClose={false}
-      style={{ position: 'absolute' }}
       bodyStyle={bodyStyle}
       headerStyle={headerStyle}
       closeIcon={<CloseIcon src="/icons/close-icon.svg" />}
@@ -50,7 +45,7 @@ const bodyStyle: React.CSSProperties = {
   flexDirection: 'column',
 };
 
-const headerStyle = {
+const headerStyle: React.CSSProperties = {
   background: 'white',
   border: 'none',
 };
