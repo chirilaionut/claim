@@ -2,7 +2,6 @@ import { CosmWasmClient, SigningCosmWasmClient } from 'secretjs';
 import { divDecimals, formatWithSixDecimals, toFixedTrunc } from '../utils/numberFormat';
 import { getViewingKey, Snip20GetBalance } from '../api/bridge/scrt';
 import { unlockToken, fixUnlockToken } from '../constants/keplr';
-import { ITokenInfo } from '../interfaces';
 
 const chainId = process.env.CHAIN_ID;
 
@@ -227,60 +226,6 @@ export const getSIENNABalance = async (walletAddress: string, secretjs: CosmWasm
   });
 };
 
-export const getSecretToken = async (
-  symbol: string,
-  tokenAddress: string,
-  walletAddress: string,
-  secretjs: CosmWasmClient,
-  tokens: ITokenInfo[]
-) => {
-  return new Promise(async (resolve, reject) => {
-    const balanceToken = {};
-    const balanceTokenMin = {};
-
-    if (!symbol && tokenAddress) {
-      try {
-        symbol = tokens.find((t) => t.dst_address === tokenAddress).display_props.symbol;
-      } catch (error) {
-        console.log('Error finding symbol for SNIP20 address', tokenAddress, error);
-        reject(error);
-      }
-    }
-    if (!symbol) {
-      return;
-    }
-
-    const token = tokens.find((t) => t.display_props.symbol === symbol);
-
-    try {
-      const balance = await getSnip20Balance(
-        token.dst_address,
-        secretjs,
-        walletAddress,
-        token.decimals
-      );
-      if (balance.includes(unlockToken)) {
-        balanceToken[token.src_coin] = balance;
-      } else {
-        balanceToken[token.src_coin] = formatWithSixDecimals(toFixedTrunc(balance, 6));
-      }
-    } catch (error) {
-      balanceToken[token.src_coin] = unlockToken;
-      reject(error);
-    }
-
-    try {
-      balanceTokenMin[token.src_coin] = token.display_props.min_from_scrt;
-    } catch (error) {
-      reject(error);
-      // Ethereum?
-    }
-
-    resolve({ balanceToken, balanceTokenMin });
-  });
-};
-
-// The token address is the SNIP-20 destination address for the given token
 export const unlockTokenBalance = async (tokenAddress: string) => {
   try {
     const keplr = getKeplrOrFail();

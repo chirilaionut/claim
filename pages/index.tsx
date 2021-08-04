@@ -18,8 +18,6 @@ import ConnectWalletButton from '../components/ConnectWalletButton';
 import ConnectWalletView from '../components/ConnectWalletView';
 import ClaimButton from '../components/ClaimButton';
 import PreLoadIndicator from '../components/PreLoadIndicator';
-import { Text } from '../components/Shared';
-import { SET_TOKENS_REQUESTED } from '../redux/actions/tokens';
 import { FaGithub } from 'react-icons/fa';
 
 interface Props {
@@ -49,7 +47,6 @@ const Claim: React.FC<Props> = ({}) => {
 
   useEffect(() => {
     dispatch({ type: CHECK_KEPLR_REQUESTED });
-    dispatch({ type: SET_TOKENS_REQUESTED });
   }, [dispatch]);
 
   useEffect(() => {
@@ -95,7 +92,6 @@ const Claim: React.FC<Props> = ({}) => {
       await claimVestedTokens(user.secretjsSend, process.env.MGMT_CONTRACT);
 
       dispatch({ type: CHECK_KEPLR_REQUESTED });
-      dispatch({ type: SET_TOKENS_REQUESTED });
       dispatch({
         type: SHOW_HIDDEN_TOKEN_BALANCE_REQUESTED,
         payload: {
@@ -513,7 +509,7 @@ const ClaimCloseButton = styled.div`
   }
 `;
 
-const ErrorText = styled(Text)`
+const ErrorText = styled.div`
   color: ${(props) => props.theme.colors.warning};
   text-align: center;
 `;

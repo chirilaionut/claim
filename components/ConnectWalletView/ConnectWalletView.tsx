@@ -3,126 +3,9 @@ import styled, { keyframes } from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { defaultColors } from '../../styles/theme';
-import { Text } from '../../components/Shared';
 import { CHECK_KEPLR_REQUESTED } from '../../redux/actions/user';
 import { TheDrawerWrapper } from '../Common/TheDrawer';
 import { StoreState } from '../../interfaces';
-
-const Container = styled.div`
-  position: fixed !important;
-  bottom: 0;
-  right: 0;
-  height: 100vh;
-  width: 20vw !important;
-  min-width: 300px;
-  pointer-events: none;
-  z-index: 999 !important;
-
-  @media (max-width: ${(props) => props.theme.breakpoints.md}) {
-    width: 100vw;
-  }
-`;
-
-const HeaderContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  @media (max-height: 530px) {
-    margin-bottom: 30px;
-  }
-`;
-
-const ConnectWalletIcon = styled.div`
-  background-image: url('/icons/thick-connect-icon-light.svg');
-  width: 30px;
-  height: 30px;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: 45%;
-`;
-
-const HeaderTitle = styled(Text)`
-  color: white;
-  font-size: 16px;
-  font-weight: 600;
-  margin-top: 15px;
-  margin-left: 10px;
-`;
-
-const Line = styled.div`
-  width: 2px;
-  min-height: 190px;
-  background: ${defaultColors.blackStone70};
-  align-self: center;
-  margin-top: 20px;
-  margin-bottom: 50px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  overflow: hidden;
-
-  @media (max-height: 610px) {
-    min-height: 120px;
-  }
-
-  @media (max-height: 530px) {
-    display: none;
-  }
-`;
-
-const rotate = keyframes`
-  0%, 100% {
-    transform: translateY(350%); 
-  }
-  50% {
-    transform: translateY(-350%);
-  }
-`;
-
-const SmallLine = styled.div`
-  width: 2px;
-  height: 30px;
-  background: ${(props) => props.theme.colors.warning};
-  animation: ${rotate} 3s linear infinite;
-`;
-
-const WalletButton = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  pointer-events: initial;
-  cursor: pointer;
-  &:hover {
-    opacity: 0.8;
-  }
-`;
-
-const WalletIcon = styled.img``;
-
-const WalletTitle = styled(Text)`
-  color: white;
-  margin-top: 10px;
-  font-weight: 600;
-  font-size: 15px;
-`;
-
-const ErrorText = styled(Text)`
-  color: ${(props) => props.theme.colors.warning};
-  text-align: center;
-  position: absolute;
-  bottom: 50px;
-  margin-left: auto;
-  margin-right: auto;
-  width: 80%;
-
-  -webkit-user-select: initial;
-  -khtml-user-select: initial;
-  -moz-user-select: initial;
-  -o-user-select: initial;
-  user-select: initial;
-`;
 
 interface Props {
   onClose: () => void;
@@ -202,3 +85,114 @@ const ConnectWalletView = ({ onClose, visible }: Props) => {
 };
 
 export default ConnectWalletView;
+
+const Container = styled.div`
+  position: fixed !important;
+  bottom: 0;
+  right: 0;
+  height: 100vh;
+  width: 20vw !important;
+  min-width: 300px;
+  pointer-events: none;
+  z-index: 999 !important;
+
+  @media (max-width: ${(props) => props.theme.breakpoints.md}) {
+    width: 100vw;
+  }
+`;
+
+const HeaderContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  @media (max-height: 530px) {
+    margin-bottom: 30px;
+  }
+`;
+
+const ConnectWalletIcon = styled.div`
+  background-image: url('/icons/thick-connect-icon-light.svg');
+  width: 30px;
+  height: 30px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 45%;
+`;
+
+const HeaderTitle = styled.p`
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  margin-top: 15px;
+  margin-left: 10px;
+`;
+
+const Line = styled.div`
+  width: 2px;
+  min-height: 190px;
+  background: ${defaultColors.blackStone70};
+  align-self: center;
+  margin-top: 20px;
+  margin-bottom: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+
+  @media (max-height: 610px) {
+    min-height: 120px;
+  }
+
+  @media (max-height: 530px) {
+    display: none;
+  }
+`;
+
+const rotate = keyframes`
+  0%, 100% {
+    transform: translateY(350%); 
+  }
+  50% {
+    transform: translateY(-350%);
+  }
+`;
+
+const SmallLine = styled.div`
+  width: 2px;
+  height: 30px;
+  background: ${(props) => props.theme.colors.warning};
+  animation: ${rotate} 3s linear infinite;
+`;
+
+const WalletButton = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  pointer-events: initial;
+  cursor: pointer;
+  &:hover {
+    opacity: 0.8;
+  }
+`;
+
+const WalletIcon = styled.img``;
+
+const WalletTitle = styled.div`
+  color: white;
+  margin-top: 10px;
+  font-weight: 600;
+  font-size: 15px;
+`;
+
+const ErrorText = styled.div`
+  color: ${(props) => props.theme.colors.warning};
+  text-align: center;
+  position: absolute;
+  bottom: 50px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 80%;
+  user-select: initial;
+`;

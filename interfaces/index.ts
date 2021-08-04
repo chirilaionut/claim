@@ -11,7 +11,7 @@ export type TextAlign = 'left' | 'center' | 'right';
 export type TOKEN_USAGE = 'BRIDGE' | 'REWARDS' | 'LPSTAKING' | 'SWAP';
 
 export interface ITokenInfo {
-  dst_coin: any;
+  dst_coin: string;
   price: string;
   name: string;
   symbol: string;
