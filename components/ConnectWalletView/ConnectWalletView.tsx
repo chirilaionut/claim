@@ -4,30 +4,16 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { defaultColors } from '../../styles/theme';
 import { CHECK_KEPLR_REQUESTED } from '../../redux/actions/user';
-import { TheDrawerWrapper } from '../Common/TheDrawer';
-import { StoreState } from '../../interfaces';
-
+import { IStore } from '../../redux/store';
+import SideDrawer from '../SideDrawer';
 interface Props {
   onClose: () => void;
   visible: boolean;
 }
 
-const bodyStyle = {
-  background: defaultColors.primary,
-  paddingTop: 20,
-  justifyContent: 'flex-start',
-  display: 'flex',
-  flexDirection: 'column',
-};
-
-const headerStyle = {
-  background: 'white',
-  border: 'none',
-};
-
 const ConnectWalletView = ({ onClose, visible }: Props) => {
   const dispatch = useDispatch();
-  const user = useSelector((state: StoreState) => state.user);
+  const user = useSelector((state: IStore) => state.user);
   const [errorMessage, setErrorMessage] = useState('');
   const [isVisible, setIsVisible] = useState(visible);
 
@@ -58,12 +44,7 @@ const ConnectWalletView = ({ onClose, visible }: Props) => {
 
   return (
     <Container>
-      <TheDrawerWrapper
-        onClose={onClose}
-        visible={isVisible}
-        headerStyle={headerStyle}
-        bodyStyle={bodyStyle as React.CSSProperties}
-      >
+      <SideDrawer onClose={onClose} visible={isVisible}>
         <HeaderContainer>
           <ConnectWalletIcon />
           <HeaderTitle>Connect Wallet</HeaderTitle>
@@ -79,7 +60,7 @@ const ConnectWalletView = ({ onClose, visible }: Props) => {
         </WalletButton>
 
         <ErrorText>{errorMessage}</ErrorText>
-      </TheDrawerWrapper>
+      </SideDrawer>
     </Container>
   );
 };

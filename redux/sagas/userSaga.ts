@@ -1,4 +1,3 @@
-import { StoreState } from './../../interfaces/index';
 import { put, call, takeLatest, takeEvery, select } from 'redux-saga/effects';
 
 import {
@@ -16,6 +15,7 @@ import {
   getSIENNABalance,
 } from '../../api/keplr';
 import { CosmWasmClient } from 'secretjs';
+import { IStore } from '../store';
 
 function* updateUser({ payload }: { type: any; payload: any }) {
   yield put({ type: SET_USER, payload });
@@ -84,7 +84,7 @@ function* showHiddenTokenBalance({
   type: typeof SHOW_HIDDEN_TOKEN_BALANCE_REQUESTED;
   payload: { symbol: string; tokenAddress: string };
 }) {
-  const state: StoreState = yield select();
+  const state: IStore = yield select();
   const user = state.user;
 
   try {

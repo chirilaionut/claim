@@ -1,4 +1,4 @@
-import React, { useState, useEffect, createContext, useContext } from 'react';
+import { useState, useEffect, createContext, useContext } from 'react';
 interface IBreakpoint {
   xs?: boolean;
   sm?: boolean;
@@ -71,4 +71,15 @@ function useBreakpoint(): IBreakpoint {
   }
   return context;
 }
-export { useBreakpoint, BreakpointProvider };
+
+function useIsMobile() {
+  const breakpoint = useBreakpoint();
+  if (!breakpoint) return false;
+
+  if (breakpoint.xs === true || breakpoint.sm === true || breakpoint.md === true) {
+    return true;
+  }
+  return false;
+}
+
+export { useIsMobile, useBreakpoint, BreakpointProvider };

@@ -1,6 +1,5 @@
 import React from 'react';
 import styled, { keyframes } from 'styled-components';
-import isEmpty from 'lodash.isempty';
 import { RiArrowRightUpLine } from 'react-icons/ri';
 import { FiAlertTriangle } from 'react-icons/fi';
 
@@ -14,7 +13,7 @@ interface Props {
   isError?: boolean;
 }
 
-const SwapNotify: React.FC<Props> = ({
+const Notification: React.FC<Props> = ({
   msg,
   withLink = false,
   linkText,
@@ -38,7 +37,7 @@ const SwapNotify: React.FC<Props> = ({
               <RiArrowRightUpLine size={16} style={{ marginLeft: 5, paddingBottom: 1 }} />
             </ALink>
           )}
-          {!isEmpty(animationText) && (
+          {animationText && (
             <AnimationArea>
               <hr />
               <AnimationText> {animationText}</AnimationText>
@@ -50,7 +49,7 @@ const SwapNotify: React.FC<Props> = ({
   );
 };
 
-export default SwapNotify;
+export default Notification;
 
 const ALink = styled.a`
   font-weight: 700;

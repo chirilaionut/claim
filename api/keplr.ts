@@ -1,8 +1,8 @@
 import { CosmWasmClient, SigningCosmWasmClient } from 'secretjs';
 import { divDecimals, formatWithSixDecimals, toFixedTrunc } from '../utils/numberFormat';
-import { getViewingKey, Snip20GetBalance } from '../api/bridge/scrt';
-import { unlockToken, fixUnlockToken } from '../constants/keplr';
-
+import { unlockToken, fixUnlockToken, ERROR_WRONG_VIEWING_KEY } from '../constants';
+import { sleep } from './utils';
+import { Snip20GetBalance } from './snip20';
 const chainId = process.env.CHAIN_ID;
 
 export interface Keplr {
@@ -11,6 +11,36 @@ export interface Keplr {
   enable: any;
   getSecret20ViewingKey: any;
 }
+
+export const getViewingKey = async (params: {
+  keplr: any;
+  chainId: string;
+  address: string;
+  currentBalance?: string;
+}) => {
+  const { keplr, chainId, address, currentBalance } = params;
+
+  if (typeof currentBalance === 'string' && currentBalance.includes(ERROR_WRONG_VIEWING_KEY)) {
+    await sleep(1000);
+  }
+
+  let viewingKey: string;
+
+  let tries = 0;
+  while (true) {
+    tries += 1;
+    try {
+      viewingKey = await keplr.getSecret20ViewingKey(chainId, address);
+      // console.log('-- viewingKey: ', viewingKey);
+    } catch (error) {}
+    if (viewingKey || tries === 3) {
+      break;
+    }
+    await sleep(100);
+  }
+
+  return viewingKey;
+};
 
 export const getKeplr = (): Keplr | undefined => {
   if (window.keplr) {

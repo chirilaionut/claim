@@ -1,13 +1,10 @@
-import React from 'react';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
-import { useBreakpoint } from '../../hooks/breakpoints';
-import { isMobileView } from '../../utils';
+import { useIsMobile } from '../../hooks/breakpoints';
 
 const NavBarLogo: React.FC = () => {
   const router = useRouter();
-  const breakpoint = useBreakpoint();
-  const isMobile = isMobileView(breakpoint);
+  const isMobile = useIsMobile();
 
   const onClick = () => {
     router.reload();
@@ -32,9 +29,5 @@ const Container = styled.div<{ isMobile: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -o-user-select: none;
   user-select: none;
 `;

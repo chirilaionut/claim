@@ -3,9 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { Row, Col } from 'reactstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { claimVestedTokens } from '../api/vesting';
-import { unlockToken } from '../constants/keplr';
+import { unlockToken } from '../constants';
 import { useBreakpoint } from '../hooks/breakpoints';
-import { StoreState } from '../interfaces';
 import {
   CHECK_KEPLR_REQUESTED,
   SHOW_HIDDEN_TOKEN_BALANCE_REQUESTED,
@@ -19,6 +18,7 @@ import ConnectWalletView from '../components/ConnectWalletView';
 import ClaimButton from '../components/ClaimButton';
 import PreLoadIndicator from '../components/PreLoadIndicator';
 import { FaGithub } from 'react-icons/fa';
+import { IStore } from '../redux/store';
 
 interface Props {
   onClickConnectWallet: (e: React.SyntheticEvent) => void;
@@ -31,7 +31,7 @@ const Claim: React.FC<Props> = ({}) => {
   const [afterClaim, setAfterClaim] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  const user = useSelector((state: StoreState) => state.user);
+  const user = useSelector((state: IStore) => state.user);
   const breakpoint = useBreakpoint();
   const dispatch = useDispatch();
 

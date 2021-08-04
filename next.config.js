@@ -5,10 +5,8 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 });
 
 const webpack = require('webpack');
-const { i18n } = require('./next-i18next.config');
 
 module.exports = withBundleAnalyzer({
-  i18n,
   webpack: (config) => {
     config.plugins.push(new webpack.EnvironmentPlugin(process.env));
     return config;

@@ -1,12 +1,12 @@
 import { notification } from 'antd';
-import SwapNotify from '../components/SwapNotify';
+import Notification from '../components/Notification';
 
 const error = (msg: string, duration = 0, title?: string, animationText?: string) => {
   notification.open({
     message: '',
     className: 'swap-notify',
     description: (
-      <SwapNotify
+      <Notification
         title={title || 'Warning'}
         msg={msg}
         isError={true}
@@ -28,7 +28,7 @@ const success = (
     message: '',
     className: 'swap-notify',
     description: (
-      <SwapNotify
+      <Notification
         title={title || 'Success'}
         msg={msg}
         animationText={animationText || null}
