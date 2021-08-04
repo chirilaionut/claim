@@ -1,33 +1,32 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import Btn from '../Core/Button';
-
 import { defaultColors } from '../../styles/theme';
 
 interface Props {
-  buttonText: string;
   onClick: (e: React.SyntheticEvent) => void;
 }
-const ConnectWalletButton: React.FC<Props> = ({ buttonText, onClick }) => {
-  return (
-    <Button
-      bg={defaultColors.primary}
-      color={'white'}
-      withIcon
-      buttonText={buttonText}
-      onClick={onClick}
-      iconSrc={'/icons/thick-connect-icon-light.svg'}
-    ></Button>
-  );
+const ConnectWalletButton: React.FC<Props> = ({ onClick }) => {
+  return <ConnectButton onClick={onClick}>Connect Wallet</ConnectButton>;
 };
 
 export default ConnectWalletButton;
 
-const Button = styled(Btn)`
-  position: fixed;
+const ConnectButton = styled.button`
+  background-color: ${defaultColors.blackStone80};
+  color: ${defaultColors.white};
+  font-size: 17px;
+  width: 250px;
+  height: 85px;
+  position: absolute;
   right: 0px;
   top: 0px;
   z-index: 9;
   cursor: pointer;
+  font-weight: 500;
+  letter-spacing: -0.66px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
 `;

@@ -16,6 +16,6 @@
     "jsx": "preserve",
     "typeRoots": ["node_modules/@types", "@types"]
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "components/Button/Button.js"],
   "exclude": ["node_modules"]
 }

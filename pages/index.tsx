@@ -142,9 +142,7 @@ const Claim: React.FC<Props> = ({}) => {
           <UnlockTokenButton onClick={onClickUnlockToken} isUnlock={isUnlock}>
             {renderBalanceSIENNA()}
           </UnlockTokenButton>
-          {!user.isKeplrAuthorized && (
-            <ConnectWalletButton buttonText="Connect Wallet" onClick={onClickToggleWallet} />
-          )}
+          {!user.isKeplrAuthorized && <ConnectWalletButton onClick={onClickToggleWallet} />}
           <ConnectWalletView
             visible={showSwapAccountDrawer}
             onClose={() => setShowSwapAccountDrawer(false)}
