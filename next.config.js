@@ -1,4 +1,4 @@
-require('dotenv').config({ path: `./.env.${process.env.ENV}` });
+require('dotenv').config({ path: `./.env.${process.env.ENVIRON}` });
 
 const webpack = require('webpack');
 
