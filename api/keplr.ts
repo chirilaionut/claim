@@ -1,6 +1,12 @@
 import { CosmWasmClient, SigningCosmWasmClient } from 'secretjs';
 import { divDecimals, formatWithSixDecimals, toFixedTrunc } from '../utils/numberFormat';
-import { unlockToken, fixUnlockToken, ERROR_WRONG_VIEWING_KEY } from '../constants';
+import {
+  unlockToken,
+  fixUnlockToken,
+  ERROR_WRONG_VIEWING_KEY,
+  SECRET_RPC,
+  SECRET_LCD,
+} from '../constants';
 import { sleep } from './utils';
 import { Snip20GetBalance } from './snip20';
 const chainId = process.env.CHAIN_ID;
@@ -32,7 +38,7 @@ export const getViewingKey = async (params: {
     try {
       viewingKey = await keplr.getSecret20ViewingKey(chainId, address);
       // console.log('-- viewingKey: ', viewingKey);
-    } catch (error) { }
+    } catch (error) {}
     if (viewingKey || tries === 3) {
       break;
     }
@@ -92,8 +98,8 @@ export const signInKeplr = async () => {
       await keplr.experimentalSuggestChain({
         chainId,
         chainName: process.env.CHAIN_NAME,
-        rpc: process.env.SECRET_RPC,
-        rest: process.env.SECRET_LCD,
+        rpc: SECRET_RPC,
+        rest: SECRET_LCD,
         bip44: {
           coinType: 529,
         },
@@ -142,7 +148,7 @@ export const signInKeplr = async () => {
     const address = accounts[0].address;
 
     const secretjsSend = initSecretJS(process.env.SECRET_POST_ADDRESS, true, address, chainId);
-    const secretjs = initSecretJS(process.env.SECRET_LCD, false, address, chainId);
+    const secretjs = initSecretJS(SECRET_LCD, false, address, chainId);
 
     // window.secretjs = secretjs;
     // window.secretjsSend = secretjsSend
@@ -163,21 +169,21 @@ const initSecretJS = (
   try {
     const client = isSigner
       ? new SigningCosmWasmClient(
-        address,
-        walletAddress,
-        window.getOfflineSigner(chainId),
-        window.getEnigmaUtils(chainId),
-        {
-          init: {
-            amount: [{ amount: '300000', denom: 'uscrt' }],
-            gas: '300000',
-          },
-          exec: {
-            amount: [{ amount: '500000', denom: 'uscrt' }],
-            gas: '500000',
-          },
-        }
-      )
+          address,
+          walletAddress,
+          window.getOfflineSigner(chainId),
+          window.getEnigmaUtils(chainId),
+          {
+            init: {
+              amount: [{ amount: '300000', denom: 'uscrt' }],
+              gas: '300000',
+            },
+            exec: {
+              amount: [{ amount: '500000', denom: 'uscrt' }],
+              gas: '500000',
+            },
+          }
+        )
       : new CosmWasmClient(address);
     return client;
   } catch (error) {
