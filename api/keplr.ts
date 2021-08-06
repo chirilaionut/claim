@@ -38,7 +38,7 @@ export const getViewingKey = async (params: {
     try {
       viewingKey = await keplr.getSecret20ViewingKey(chainId, address);
       // console.log('-- viewingKey: ', viewingKey);
-    } catch (error) {}
+    } catch (error) { }
     if (viewingKey || tries === 3) {
       break;
     }
@@ -147,7 +147,7 @@ export const signInKeplr = async () => {
     const accounts = await keplrOfflineSigner.getAccounts();
     const address = accounts[0].address;
 
-    const secretjsSend = initSecretJS(process.env.SECRET_POST_ADDRESS, true, address, chainId);
+    const secretjsSend = initSecretJS(SECRET_LCD, true, address, chainId);
     const secretjs = initSecretJS(SECRET_LCD, false, address, chainId);
 
     // window.secretjs = secretjs;
@@ -169,21 +169,21 @@ const initSecretJS = (
   try {
     const client = isSigner
       ? new SigningCosmWasmClient(
-          address,
-          walletAddress,
-          window.getOfflineSigner(chainId),
-          window.getEnigmaUtils(chainId),
-          {
-            init: {
-              amount: [{ amount: '300000', denom: 'uscrt' }],
-              gas: '300000',
-            },
-            exec: {
-              amount: [{ amount: '500000', denom: 'uscrt' }],
-              gas: '500000',
-            },
-          }
-        )
+        address,
+        walletAddress,
+        window.getOfflineSigner(chainId),
+        window.getEnigmaUtils(chainId),
+        {
+          init: {
+            amount: [{ amount: '300000', denom: 'uscrt' }],
+            gas: '300000',
+          },
+          exec: {
+            amount: [{ amount: '500000', denom: 'uscrt' }],
+            gas: '500000',
+          },
+        }
+      )
       : new CosmWasmClient(address);
     return client;
   } catch (error) {
