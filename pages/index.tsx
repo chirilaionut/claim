@@ -37,9 +37,7 @@ const Claim: React.FC<Props> = ({}) => {
 
   const isUnlock = user.balanceSIENNA === unlockToken;
 
-  console.log('ENV', process.env);
-  console.log('ENV network', process.env.ENV);
-  console.log('CHAIN_ID', process.env.CHAIN_ID);
+  console.log('TEST', process.env.TEST);
 
   const renderBalanceSIENNA = () => {
     if (isUnlock) {
