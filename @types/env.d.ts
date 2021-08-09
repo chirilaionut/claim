@@ -5,7 +5,6 @@ declare namespace NodeJS {
     CHAIN_NAME: string;
     SECRET_RPC: string;
     SECRET_LCD: string;
-    SECRET_POST_ADDRESS: string;
     SIENNA_CONTRACT: string;
     MGMT_CONTRACT: string;
   }

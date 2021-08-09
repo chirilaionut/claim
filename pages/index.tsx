@@ -19,6 +19,7 @@ import ClaimButton from '../components/ClaimButton';
 import PreLoadIndicator from '../components/PreLoadIndicator';
 import { FaGithub } from 'react-icons/fa';
 import { IStore } from '../redux/store';
+import { getFeeForExecute } from '../api/utils';
 
 interface Props {
   onClickConnectWallet: (e: React.SyntheticEvent) => void;
@@ -89,7 +90,11 @@ const Claim: React.FC<Props> = ({}) => {
     setNextButtonLoading(true);
 
     try {
-      await claimVestedTokens(user.secretjsSend, process.env.MGMT_CONTRACT);
+      await claimVestedTokens(
+        user.secretjsSend,
+        process.env.MGMT_CONTRACT,
+        getFeeForExecute(600_000)
+      );
 
       dispatch({ type: CHECK_KEPLR_REQUESTED });
       dispatch({

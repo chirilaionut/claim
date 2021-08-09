@@ -194,7 +194,7 @@ const initSecretJS = (
 
 export const getSnip20Balance = async (
   snip20Address: string,
-  secretjs: any,
+  secretjs: CosmWasmClient,
   walletAddress: string,
   decimals?: string | number
 ) => {
