@@ -85,7 +85,9 @@ const AnimationText = styled.div`
 const Title = styled.div`
   font-weight: 700;
   font-size: 16px;
-  margin-bottom: 8px;
+  margin-bottom: 0px;
+  display: flex;
+  align-items: center;
 `;
 
 const Msg = styled.div`

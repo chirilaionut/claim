@@ -93,7 +93,7 @@ const Claim: React.FC<Props> = ({}) => {
       await claimVestedTokens(
         user.secretjsSend,
         process.env.MGMT_CONTRACT,
-        getFeeForExecute(600_000)
+        getFeeForExecute(700_000)
       );
 
       dispatch({ type: CHECK_KEPLR_REQUESTED });
@@ -109,8 +109,17 @@ const Claim: React.FC<Props> = ({}) => {
 
       notify.success(`Successfully claimed SIENNA tokens`, 4.5);
     } catch (error) {
+      console.log('Message', error.message);
+
+      if (error.message.includes('Nothing to claim right now')) {
+        notify.error(`Nothing to claim right now`, 10, 'Error');
+      } else if (error.message.includes('Request failed with status code 502')) {
+        notify.error(`Could not reach node. Please try again`, 4.5, 'Error');
+      } else {
+        notify.error(`Error claiming SIENNA tokens`, 4.5, 'Error', JSON.stringify(error.message));
+      }
+
       console.log('Error claiming', error);
-      notify.error(`Error claiming SIENNA tokens`, 4.5);
       setNextButtonLoading(false);
     }
   };
