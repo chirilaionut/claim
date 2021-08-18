@@ -219,7 +219,7 @@ const Claim: React.FC<Props> = ({}) => {
                 containerStyle={{ height: 36, textAlign: 'center', margin: '0 auto' }}
               />
             ) : (
-              'Claim Now'
+              'Claim Nows'
             )
           }
           icon={nextButtonLoading ? false : '/icons/arrow-forward-light.svg'}
