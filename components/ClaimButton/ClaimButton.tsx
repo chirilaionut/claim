@@ -44,12 +44,12 @@ const ClaimBtn = styled.button<{
   color: ${defaultColors.colors.light};
   cursor: pointer;
   border: none;
-  width: 236px;
+  width: 320px;
   height: 48px;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  justify-content: space-around;
+  justify-content: center;
   align-content: center;
   align-items: center;
   outline: none;

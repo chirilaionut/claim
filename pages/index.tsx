@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components';
 import React, { useState, useEffect } from 'react';
 import { Row, Col } from 'reactstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { claimVestedTokens } from '../api/vesting';
+// import { claimVestedTokens } from '../api/vesting';
 import { unlockToken } from '../constants';
 import { useBreakpoint } from '../hooks/breakpoints';
 import {
@@ -11,15 +11,15 @@ import {
   KEPLR_SIGN_OUT,
 } from '../redux/actions/user';
 import { defaultColors } from '../styles/theme';
-import notify from '../utils/notifications';
+// import notify from '../utils/notifications';
 import NavBarLogo from '../components/NavBarLogo';
 import ConnectWalletButton from '../components/ConnectWalletButton';
 import ConnectWalletView from '../components/ConnectWalletView';
 import ClaimButton from '../components/ClaimButton';
-import PreLoadIndicator from '../components/PreLoadIndicator';
-import { FaGithub } from 'react-icons/fa';
+// import PreLoadIndicator from '../components/PreLoadIndicator';
+// import { FaGithub } from 'react-icons/fa';
 import { IStore } from '../redux/store';
-import { getFeeForExecute } from '../api/utils';
+// import { getFeeForExecute } from '../api/utils';
 
 interface Props {
   onClickConnectWallet: (e: React.SyntheticEvent) => void;
@@ -36,6 +36,7 @@ const Claim: React.FC<Props> = ({}) => {
   const breakpoint = useBreakpoint();
   const dispatch = useDispatch();
 
+  console.log(nextButtonLoading, breakpoint);
   const isUnlock = user.balanceSIENNA === unlockToken;
 
   const renderBalanceSIENNA = () => {
@@ -86,43 +87,47 @@ const Claim: React.FC<Props> = ({}) => {
     }
   };
 
-  const onClickClaimNow = async () => {
-    setNextButtonLoading(true);
-
-    try {
-      await claimVestedTokens(
-        user.secretjsSend,
-        process.env.MGMT_CONTRACT,
-        getFeeForExecute(900_000)
-      );
-
-      dispatch({ type: CHECK_KEPLR_REQUESTED });
-      dispatch({
-        type: SHOW_HIDDEN_TOKEN_BALANCE_REQUESTED,
-        payload: {
-          tokenAddress: process.env.SIENNA_CONTRACT,
-          symbol: undefined,
-        },
-      });
-      setNextButtonLoading(false);
-      setAfterClaim(true);
-
-      notify.success(`Successfully claimed SIENNA tokens`, 4.5);
-    } catch (error) {
-      console.log('Message', error.message);
-
-      if (error.message.includes('Nothing to claim right now')) {
-        notify.error(`Nothing to claim right now`, 10, 'Error');
-      } else if (error.message.includes('Request failed with status code 502')) {
-        notify.error(`Could not reach node. Please try again`, 4.5, 'Error');
-      } else {
-        notify.error(`Error claiming SIENNA tokens`, 4.5, 'Error', JSON.stringify(error.message));
-      }
-
-      console.log('Error claiming', error);
-      setNextButtonLoading(false);
-    }
+  const disconnectWallet = () => {
+    dispatch({ type: KEPLR_SIGN_OUT });
   };
+
+  // const onClickClaimNow = async () => {
+  //   setNextButtonLoading(true);
+
+  //   try {
+  //     await claimVestedTokens(
+  //       user.secretjsSend,
+  //       process.env.MGMT_CONTRACT,
+  //       getFeeForExecute(900_000)
+  //     );
+
+  //     dispatch({ type: CHECK_KEPLR_REQUESTED });
+  //     dispatch({
+  //       type: SHOW_HIDDEN_TOKEN_BALANCE_REQUESTED,
+  //       payload: {
+  //         tokenAddress: process.env.SIENNA_CONTRACT,
+  //         symbol: undefined,
+  //       },
+  //     });
+  //     setNextButtonLoading(false);
+  //     setAfterClaim(true);
+
+  //     notify.success(`Successfully claimed SIENNA tokens`, 4.5);
+  //   } catch (error) {
+  //     console.log('Message', error.message);
+
+  //     if (error.message.includes('Nothing to claim right now')) {
+  //       notify.error(`Nothing to claim right now`, 10, 'Error');
+  //     } else if (error.message.includes('Request failed with status code 502')) {
+  //       notify.error(`Could not reach node. Please try again`, 4.5, 'Error');
+  //     } else {
+  //       notify.error(`Error claiming SIENNA tokens`, 4.5, 'Error', JSON.stringify(error.message));
+  //     }
+
+  //     console.log('Error claiming', error);
+  //     setNextButtonLoading(false);
+  //   }
+  // };
 
   const onClickCloseClaimNow = () => {
     setNextButtonLoading(false);
@@ -151,11 +156,25 @@ const Claim: React.FC<Props> = ({}) => {
           <NavBarLogo />
         </ClaimTopNavBarLeft>
 
-        <ClaimTopNavBarRight xs="12" sm="12" md="12" lg="6" xl="6">
+        <ClaimTopNavBarRight
+          xs="12"
+          sm="12"
+          md="12"
+          lg="6"
+          xl="6"
+          isKeplrAuthorized={user.isKeplrAuthorized}
+        >
           <span>Balance:</span>
           <UnlockTokenButton onClick={onClickUnlockToken} isUnlock={isUnlock}>
             {renderBalanceSIENNA()}
           </UnlockTokenButton>
+
+          {user.isKeplrAuthorized && (
+            <DisconnectWalletButton onClick={disconnectWallet} isUnlock={isUnlock}>
+              Disconnect Wallet
+            </DisconnectWalletButton>
+          )}
+
           {!user.isKeplrAuthorized && <ConnectWalletButton onClick={onClickToggleWallet} />}
           <ConnectWalletView
             visible={showSwapAccountDrawer}
@@ -165,26 +184,32 @@ const Claim: React.FC<Props> = ({}) => {
       </ClaimTopNavBar>
 
       <ClaimBody>
-        <ClaimBodyLeft xs="12" sm="12" md="12" lg="6" xl="6">
+        <ClaimBodyLeft
+          xs="12"
+          sm="12"
+          md="12"
+          lg={user.isKeplrAuthorized ? '6' : '12'}
+          xl={user.isKeplrAuthorized ? '6' : '12'}
+        >
           <h1>Claim your SIENNA</h1>
           {user.isKeplrAuthorized ? (
             <ClaimButton
-              text="Disconnect Wallet"
-              icon="/icons/wallet-light.svg"
-              fontSize="12px"
+              text="Claim Now"
+              icon="/icons/arrow-forward-light.svg"
+              fontSize="14px"
               width="16.64"
               height="16"
-              onClick={onClickToggleWallet}
+              onClick={connectKeplr}
               disabled={false}
               containerStyle={{
-                backgroundColor: defaultColors.blackStone80,
+                backgroundColor: defaultColors.swapBlue,
               }}
             />
           ) : (
             <ClaimButton
-              text="Connect Keplr Wallet"
+              text="Connect your Keplr Wallet"
               icon="/icons/wallet-light.svg"
-              fontSize="12px"
+              fontSize="14px"
               width="16.64"
               height="16"
               onClick={connectKeplr}
@@ -194,19 +219,38 @@ const Claim: React.FC<Props> = ({}) => {
               }}
             />
           )}
+
+          <p>
+            If you participated in the private sale for Sienna, you can claim your SIENNA tokens
+            here. New tokens will arrive every 24 hours.
+          </p>
+          <p>Make sure you have a bit of SCRT in your wallet to pay for the transaction.</p>
           <ErrorText>{errorMessage}</ErrorText>
         </ClaimBodyLeft>
 
-        <ClaimBodyRight xs="12" sm="12" md="12" lg="6" xl="6">
-          <p>
-            If you participated in the private sale for Sienna, you can claim your SIENNA tokens
-            here.
-          </p>
-          {user.isKeplrAuthorized && <p>New tokens will arrive every 24 hours.</p>}
-        </ClaimBodyRight>
+        {user.isKeplrAuthorized && (
+          <ClaimBodyRight xs="12" sm="12" md="12" lg="6" xl="6">
+            <h2>Earn more SIENNA</h2>
+
+            <p>
+              Remember, you can use your SIENNA by becoming a liquidity provider on SiennaSwap,
+              where you can earn even more SIENNA.
+            </p>
+
+            <div style={{ width: '319px', marginBottom: '70px' }}>
+              <ViewSienna
+                onClick={() => {
+                  return null;
+                }}
+              >
+                Visit SiennaSwap{' '}
+              </ViewSienna>
+            </div>
+          </ClaimBodyRight>
+        )}
       </ClaimBody>
 
-      <ClaimFooter>
+      {/* <ClaimFooter>
         <Icon href={'https://github.com/SiennaNetwork/claim'} target="_blank">
           <FaGithub size={24} />
         </Icon>
@@ -233,7 +277,7 @@ const Claim: React.FC<Props> = ({}) => {
           onClick={onClickClaimNow}
           disabled={nextButtonLoading}
         />
-      </ClaimFooter>
+      </ClaimFooter> */}
 
       {afterClaim && (
         <ClaimSuccessful>
@@ -252,18 +296,6 @@ const Claim: React.FC<Props> = ({}) => {
 };
 
 export default Claim;
-
-const Icon = styled.a`
-  position: fixed;
-  bottom: 10px;
-  left: 40px;
-  text-decoration: none;
-  color: inherit;
-  &:hover {
-    color: inherit;
-    opacity: 0.7;
-  }
-`;
 
 const Img = styled.img``;
 
@@ -292,6 +324,8 @@ const ClaimTopNavBarRight = styled(Col)`
   justify-content: flex-end;
   display: flex;
   padding: 40px 40px 0 0;
+  background: ${(props) => (props.isKeplrAuthorized ? '#fff' : defaultColors.white)};
+  transition: 3s;
 
   @media (max-width: ${(props) => props.theme.breakpoints.sm}) {
     padding: 40px 15px 0 0;
@@ -301,9 +335,21 @@ const ClaimTopNavBarRight = styled(Col)`
   }
 `;
 
+const ViewSienna = styled.button`
+  width: 184px;
+  height: 40px;
+  border: 1px solid ${defaultColors.white};
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 20px;
+  background: #fff;
+  cursor: pointer;
+  margin-top: 24px;
+`;
+
 const ClaimBody = styled(Row)`
   margin: 0;
-  height: calc(90vh - 48px);
+  height: 90vh;
   align-content: center;
 
   @media (max-width: ${(props) => props.theme.breakpoints.lg}) {
@@ -320,13 +366,26 @@ const ClaimBodyLeft = styled(Col)<{ $darkMode?: boolean }>`
   justify-content: center;
   align-items: flex-start;
   padding-left: 157px;
+  transition: 3s;
 
   > h1 {
-    font-size: 50px;
+    font-size: 60px;
     font-weight: 800;
-    line-height: 61px;
-    color: ${(props) => (props.$darkMode ? '#fff' : '#000')};
-    width: 277px;
+    line-height: initial;
+    color: ${(props) => (props.$darkMode ? '#fff' : defaultColors.blackStone80)};
+    width: 319px;
+  }
+
+  > p {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 24px;
+    width: 320px;
+    margin-top: 10px;
+  }
+
+  > p:first-child {
+    margin-top: 24px;
   }
 
   @media (max-width: ${(props) => props.theme.breakpoints.lg}) {
@@ -361,14 +420,23 @@ const ClaimBodyRight = styled(Col)`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: flex-end;
-  padding-right: 200px;
+  align-items: center;
+
+  > h2 {
+    font-size: 60px;
+    font-weight: 800;
+    line-height: initial;
+    width: 319px;
+    color: ${defaultColors.blackStone80};
+    margin-bottom: 12px;
+  }
 
   > p {
-    font-size: 21px;
-    font-weight: 600;
-    line-height: 25px;
-    width: 319px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 24px;
+    width: 320px;
+    margin-top: 10px;
   }
 
   @media (max-width: ${(props) => props.theme.breakpoints.xl}) {
@@ -405,13 +473,6 @@ const ClaimBodyRight = styled(Col)`
   }
 `;
 
-const ClaimFooter = styled(Row)`
-  margin: 0;
-  justify-content: flex-end;
-  padding: 0;
-  background: ${defaultColors.white};
-`;
-
 const UnlockButtonCSS = css`
   pointer-events: initial;
   border: 1px solid black;
@@ -431,15 +492,17 @@ const UnlockButtonCSS = css`
 
 const UnlockTokenButton = styled.div<{ isUnlock?: boolean }>`
   color: ${(props) => props.theme.colors.text};
-  height: 21px;
-  font-size: 13px;
-  font-weight: 500;
+  height: 24px;
+  font-size: 12px;
+  width: 108px;
+  font-weight: 400;
   text-align: center;
   margin-bottom: 14px;
   margin-left: 5px;
   pointer-events: none;
   display: inline-block;
   cursor: pointer;
+  line-height: 20px;
 
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -448,6 +511,30 @@ const UnlockTokenButton = styled.div<{ isUnlock?: boolean }>`
   user-select: none;
 
   ${(props) => (props.isUnlock ? UnlockButtonCSS : null)};
+`;
+
+const DisconnectWalletButton = styled.div<{ isUnlock?: boolean }>`
+  color: ${defaultColors.blackStone80};
+  background: #fff;
+  border: 1px solid ${defaultColors.blackStone30};
+  width: 134px;
+  border-radius: 12px;
+  height: 24px;
+  font-size: 12px;
+  font-weight: 400;
+  text-align: center;
+  margin-bottom: 14px;
+  margin-left: 24px;
+  display: inline-block;
+  cursor: pointer;
+  line-height: 22px;
+  cursor: pointer;
+
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  user-select: none;
 `;
 
 const ClaimSuccessful = styled.div`
