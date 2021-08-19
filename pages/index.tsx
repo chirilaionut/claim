@@ -230,7 +230,7 @@ const Claim: React.FC<Props> = ({}) => {
               />
             )}
 
-            <p>
+            <p style={{ marginTop: '24px' }}>
               If you participated in the private sale for Sienna, you can claim your SIENNA tokens
               here. New tokens will arrive every 24 hours.
             </p>
@@ -247,7 +247,7 @@ const Claim: React.FC<Props> = ({}) => {
                 where you can earn even more SIENNA.
               </p>
 
-              <div style={{ width: '319px', marginBottom: '73px' }}>
+              <div style={{ width: '319px', marginBottom: '88px' }}>
                 <ViewSienna
                   isSwapComplete={afterClaim}
                   onClick={() => {
@@ -319,7 +319,6 @@ const ClaimContainer = styled.div`
 
 const ClaimTopNavBar = styled(Row)`
   margin: 0;
-  height: 10vh;
 
   @media (max-width: ${(props) => props.theme.breakpoints.lg}) {
     height: auto;
@@ -428,8 +427,7 @@ const ClaimBodyLeft = styled(Col)<{ $darkMode?: boolean }>`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: flex-start;
-  padding-left: 157px;
+  align-items: center;
   transition: 3s;
 
   > h1 {
@@ -447,12 +445,7 @@ const ClaimBodyLeft = styled(Col)<{ $darkMode?: boolean }>`
     width: 320px;
     margin-top: 10px;
   }
-
-  > p:first-child {
-    margin-top: 24px;
-  }
-
-  }
+}
 `;
 
 const ClaimBodyRight = styled(Col)`
@@ -478,39 +471,6 @@ const ClaimBodyRight = styled(Col)`
     line-height: 24px;
     width: 320px;
     margin-top: 10px;
-  }
-
-  @media (max-width: ${(props) => props.theme.breakpoints.xl}) {
-    padding-right: 147px;
-  }
-
-  @media (max-width: ${(props) => props.theme.breakpoints.lg}) {
-    padding-right: 0;
-    padding-left: 157px;
-    align-items: flex-start;
-
-    padding-top: 30px;
-    padding-bottom: 30px;
-  }
-
-  @media (max-width: ${(props) => props.theme.breakpoints.md}) {
-    padding-right: 0;
-    padding-left: 57px;
-
-    > p {
-      font-size: 18px;
-      line-height: 24px;
-    }
-  }
-
-  @media (max-width: ${(props) => props.theme.breakpoints.sm}) {
-    padding-right: 0;
-    padding-left: 20px;
-
-    > p {
-      font-size: 18px;
-      line-height: 24px;
-    }
   }
 `;
 
