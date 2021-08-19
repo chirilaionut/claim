@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components';
 import React, { useState, useEffect } from 'react';
 import { Row, Col } from 'reactstrap';
 import { useDispatch, useSelector } from 'react-redux';
-// import { claimVestedTokens } from '../api/vesting';
+import { claimVestedTokens } from '../api/vesting';
 import { unlockToken } from '../constants';
 import { useBreakpoint } from '../hooks/breakpoints';
 import {
@@ -11,7 +11,7 @@ import {
   KEPLR_SIGN_OUT,
 } from '../redux/actions/user';
 import { defaultColors } from '../styles/theme';
-// import notify from '../utils/notifications';
+import notify from '../utils/notifications';
 import NavBarLogo from '../components/NavBarLogo';
 import ConnectWalletButton from '../components/ConnectWalletButton';
 import ConnectWalletView from '../components/ConnectWalletView';
@@ -19,7 +19,7 @@ import ClaimButton from '../components/ClaimButton';
 // import PreLoadIndicator from '../components/PreLoadIndicator';
 // import { FaGithub } from 'react-icons/fa';
 import { IStore } from '../redux/store';
-// import { getFeeForExecute } from '../api/utils';
+import { getFeeForExecute } from '../api/utils';
 
 interface Props {
   onClickConnectWallet: (e: React.SyntheticEvent) => void;
@@ -29,14 +29,14 @@ const Claim: React.FC<Props> = ({}) => {
   const [showConnectWalletView, setShowConnectWalletView] = useState(false);
   const [showSwapAccountDrawer, setShowSwapAccountDrawer] = useState(false);
   const [nextButtonLoading, setNextButtonLoading] = useState(false);
-  const [afterClaim, setAfterClaim] = useState(false);
+  const [afterClaim, setAfterClaim] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
 
   const user = useSelector((state: IStore) => state.user);
   const breakpoint = useBreakpoint();
   const dispatch = useDispatch();
 
-  console.log(nextButtonLoading, breakpoint);
+  console.log(breakpoint);
   const isUnlock = user.balanceSIENNA === unlockToken;
 
   const renderBalanceSIENNA = () => {
@@ -91,43 +91,44 @@ const Claim: React.FC<Props> = ({}) => {
     dispatch({ type: KEPLR_SIGN_OUT });
   };
 
-  // const onClickClaimNow = async () => {
-  //   setNextButtonLoading(true);
+  const onClickClaimNow = async () => {
+    setNextButtonLoading(true);
 
-  //   try {
-  //     await claimVestedTokens(
-  //       user.secretjsSend,
-  //       process.env.MGMT_CONTRACT,
-  //       getFeeForExecute(900_000)
-  //     );
+    return;
+    try {
+      await claimVestedTokens(
+        user.secretjsSend,
+        process.env.MGMT_CONTRACT,
+        getFeeForExecute(900_000)
+      );
 
-  //     dispatch({ type: CHECK_KEPLR_REQUESTED });
-  //     dispatch({
-  //       type: SHOW_HIDDEN_TOKEN_BALANCE_REQUESTED,
-  //       payload: {
-  //         tokenAddress: process.env.SIENNA_CONTRACT,
-  //         symbol: undefined,
-  //       },
-  //     });
-  //     setNextButtonLoading(false);
-  //     setAfterClaim(true);
+      dispatch({ type: CHECK_KEPLR_REQUESTED });
+      dispatch({
+        type: SHOW_HIDDEN_TOKEN_BALANCE_REQUESTED,
+        payload: {
+          tokenAddress: process.env.SIENNA_CONTRACT,
+          symbol: undefined,
+        },
+      });
+      setNextButtonLoading(false);
+      setAfterClaim(true);
 
-  //     notify.success(`Successfully claimed SIENNA tokens`, 4.5);
-  //   } catch (error) {
-  //     console.log('Message', error.message);
+      notify.success(`Successfully claimed SIENNA tokens`, 4.5);
+    } catch (error) {
+      console.log('Message', error.message);
 
-  //     if (error.message.includes('Nothing to claim right now')) {
-  //       notify.error(`Nothing to claim right now`, 10, 'Error');
-  //     } else if (error.message.includes('Request failed with status code 502')) {
-  //       notify.error(`Could not reach node. Please try again`, 4.5, 'Error');
-  //     } else {
-  //       notify.error(`Error claiming SIENNA tokens`, 4.5, 'Error', JSON.stringify(error.message));
-  //     }
+      if (error.message.includes('Nothing to claim right now')) {
+        notify.error(`Nothing to claim right now`, 10, 'Error');
+      } else if (error.message.includes('Request failed with status code 502')) {
+        notify.error(`Could not reach node. Please try again`, 4.5, 'Error');
+      } else {
+        notify.error(`Error claiming SIENNA tokens`, 4.5, 'Error', JSON.stringify(error.message));
+      }
 
-  //     console.log('Error claiming', error);
-  //     setNextButtonLoading(false);
-  //   }
-  // };
+      console.log('Error claiming', error);
+      setNextButtonLoading(false);
+    }
+  };
 
   const onClickCloseClaimNow = () => {
     setNextButtonLoading(false);
@@ -194,16 +195,17 @@ const Claim: React.FC<Props> = ({}) => {
           <h1>Claim your SIENNA</h1>
           {user.isKeplrAuthorized ? (
             <ClaimButton
-              text="Claim Now"
-              icon="/icons/arrow-forward-light.svg"
-              fontSize="14px"
+              text={nextButtonLoading ? 'Claiming...' : 'Claim Now'}
+              icon={!nextButtonLoading && '/icons/arrow-forward-light.svg'}
+              fontSize={nextButtonLoading ? '12px' : '14px'}
               width="16.64"
               height="16"
-              onClick={connectKeplr}
+              onClick={onClickClaimNow}
               disabled={false}
               containerStyle={{
                 backgroundColor: defaultColors.swapBlue,
               }}
+              prefixIcon={nextButtonLoading}
             />
           ) : (
             <ClaimButton
@@ -237,7 +239,7 @@ const Claim: React.FC<Props> = ({}) => {
               where you can earn even more SIENNA.
             </p>
 
-            <div style={{ width: '319px', marginBottom: '70px' }}>
+            <div style={{ width: '319px', marginBottom: '73px' }}>
               <ViewSienna
                 onClick={() => {
                   return null;

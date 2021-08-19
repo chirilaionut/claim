@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import defaultColors from '../../styles/theme';
+import PreLoadIndicator from '../../components/PreLoadIndicator';
 
 interface Props {
   onClick: React.MouseEventHandler;
@@ -12,6 +13,7 @@ interface Props {
   width: string;
   height: string;
   disabled?: boolean;
+  prefixIcon?: boolean;
 }
 
 const ClaimButton = ({
@@ -23,10 +25,12 @@ const ClaimButton = ({
   width,
   height,
   disabled,
+  prefixIcon = false,
 }: Props) => {
   return (
     <ClaimBtn style={containerStyle} onClick={onClick} disabled={disabled}>
-      <span style={{ fontSize: fontSize }}>{text}</span>
+      {prefixIcon && <PreLoadIndicator darkMode height={24} containerStyle={{ height: 24 }} />}
+      <span style={{ fontSize: fontSize, fontWeight: 600 }}>{text}</span>
       {icon && <Img src={icon.toString()} width={width} height={height} alt="Wallet" />}
     </ClaimBtn>
   );
