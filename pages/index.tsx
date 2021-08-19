@@ -163,31 +163,33 @@ const Claim: React.FC<Props> = ({}) => {
             <NavBarLogo />
           </ClaimTopNavBarLeft>
 
-          <ClaimTopNavBarRight
-            xs="12"
-            sm="12"
-            md="12"
-            lg={user.isKeplrAuthorized ? '6' : '12'}
-            xl={user.isKeplrAuthorized ? '6' : '12'}
-            $isAuthorized={user.isKeplrAuthorized}
-          >
-            <span>Balance:</span>
-            <UnlockTokenButton onClick={onClickUnlockToken} isUnlock={isUnlock}>
-              {renderBalanceSIENNA()}
-            </UnlockTokenButton>
+          {user.isKeplrAuthorized && (
+            <ClaimTopNavBarRight
+              xs="12"
+              sm="12"
+              md="12"
+              lg={user.isKeplrAuthorized ? '6' : '12'}
+              xl={user.isKeplrAuthorized ? '6' : '12'}
+              $isAuthorized={user.isKeplrAuthorized}
+            >
+              <span>Balance:</span>
+              <UnlockTokenButton onClick={onClickUnlockToken} isUnlock={isUnlock}>
+                {renderBalanceSIENNA()}
+              </UnlockTokenButton>
 
-            {user.isKeplrAuthorized && (
-              <DisconnectWalletButton onClick={disconnectWallet} isUnlock={isUnlock}>
-                Disconnect Wallet
-              </DisconnectWalletButton>
-            )}
+              {user.isKeplrAuthorized && (
+                <DisconnectWalletButton onClick={disconnectWallet} isUnlock={isUnlock}>
+                  Disconnect Wallet
+                </DisconnectWalletButton>
+              )}
 
-            {!user.isKeplrAuthorized && <ConnectWalletButton onClick={onClickToggleWallet} />}
-            <ConnectWalletView
-              visible={showSwapAccountDrawer}
-              onClose={() => setShowSwapAccountDrawer(false)}
-            />
-          </ClaimTopNavBarRight>
+              {!user.isKeplrAuthorized && <ConnectWalletButton onClick={onClickToggleWallet} />}
+              <ConnectWalletView
+                visible={showSwapAccountDrawer}
+                onClose={() => setShowSwapAccountDrawer(false)}
+              />
+            </ClaimTopNavBarRight>
+          )}
         </ClaimTopNavBar>
       )}
 
@@ -199,8 +201,12 @@ const Claim: React.FC<Props> = ({}) => {
             md="12"
             lg={user.isKeplrAuthorized ? '6' : '12'}
             xl={user.isKeplrAuthorized ? '6' : '12'}
+            $isKeplr={user.isKeplrAuthorized}
           >
             <h1>Claim your SIENNA</h1>
+
+            {false && <h5>Before you can continue you need SCRT in your wallet.</h5>}
+
             {user.isKeplrAuthorized ? (
               <ClaimButton
                 text={nextButtonLoading ? 'Claiming...' : 'Claim Now'}
@@ -210,9 +216,6 @@ const Claim: React.FC<Props> = ({}) => {
                 height="16"
                 onClick={onClickClaimNow}
                 disabled={false}
-                containerStyle={{
-                  backgroundColor: defaultColors.swapBlue,
-                }}
                 prefixIcon={nextButtonLoading}
               />
             ) : (
@@ -329,6 +332,7 @@ const ClaimTopNavBar = styled(Row)`
 const ClaimTopNavBarLeft = styled(Col)`
   padding-left: 0;
   background: ${defaultColors.white};
+  transition: 3s;
 `;
 
 const ClaimTopNavBarRight = styled(Col)<{ $isAuthorized?: boolean }>`
@@ -336,7 +340,6 @@ const ClaimTopNavBarRight = styled(Col)<{ $isAuthorized?: boolean }>`
   display: flex;
   padding: 40px 40px 0 0;
   background: ${(props) => (props.$isAuthorized ? '#fff' : defaultColors.white)};
-  transition: 3s;
 
   @media (max-width: ${(props) => props.theme.breakpoints.sm}) {
     padding: 40px 15px 0 0;
@@ -374,7 +377,6 @@ const ClaimBodyLeftMobile = styled(Col)<{ $darkMode?: boolean }>`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  transition: 3s;
 
   > h1 {
     font-size: 50px;
@@ -420,15 +422,16 @@ const ClaimBody = styled(Row)`
   }
 `;
 
-const ClaimBodyLeft = styled(Col)<{ $darkMode?: boolean }>`
+const ClaimBodyLeft = styled(Col)<{ $darkMode?: boolean; $isKeplr: boolean }>`
   padding: 0;
   height: 100%;
   background: ${defaultColors.white};
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
-  transition: 3s;
+  align-items: ${(props) => (props.$isKeplr ? 'center' : 'flex-start')};
+  padding-left: ${(props) => (props.$isKeplr ? '0' : '200px')};
+  transition: ${(props) => (props.$isKeplr ? '3s' : '0')};
 
   > h1 {
     font-size: 60px;
@@ -444,6 +447,14 @@ const ClaimBodyLeft = styled(Col)<{ $darkMode?: boolean }>`
     line-height: 24px;
     width: 320px;
     margin-top: 10px;
+  }
+
+  > h5 {
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 14.52px;
+    color: ${defaultColors.red};
+    margin-bottom: 12px;
   }
 }
 `;

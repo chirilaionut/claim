@@ -58,6 +58,10 @@ const ClaimBtn = styled.button<{
   align-items: center;
   outline: none;
 
+  &:disabled {
+    cursor: initial;
+  }
+
   &:hover {
     opacity: 0.75;
   }
