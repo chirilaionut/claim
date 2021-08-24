@@ -163,15 +163,17 @@ const Claim: React.FC<Props> = ({}) => {
             <NavBarLogo />
           </ClaimTopNavBarLeft>
 
+          <DummyClaimTopNavBarRight
+            xs="12"
+            sm="12"
+            md="12"
+            lg="6"
+            xl="6"
+            $isKeplr={user.isKeplrAuthorized}
+          ></DummyClaimTopNavBarRight>
+
           {user.isKeplrAuthorized && (
-            <ClaimTopNavBarRight
-              xs="12"
-              sm="12"
-              md="12"
-              lg={user.isKeplrAuthorized ? '6' : '12'}
-              xl={user.isKeplrAuthorized ? '6' : '12'}
-              $isAuthorized={user.isKeplrAuthorized}
-            >
+            <ClaimTopNavBarRight $isAuthorized={user.isKeplrAuthorized}>
               <span>Balance:</span>
               <UnlockTokenButton onClick={onClickUnlockToken} isUnlock={isUnlock}>
                 {renderBalanceSIENNA()}
@@ -195,14 +197,7 @@ const Claim: React.FC<Props> = ({}) => {
 
       {checkWindowSize() && (
         <ClaimBody>
-          <ClaimBodyLeft
-            xs="12"
-            sm="12"
-            md="12"
-            lg={user.isKeplrAuthorized ? '6' : '12'}
-            xl={user.isKeplrAuthorized ? '6' : '12'}
-            $isKeplr={user.isKeplrAuthorized}
-          >
+          <ClaimBodyLeft xs="12" sm="12" md="12" lg="6" xl="6" $isKeplr={user.isKeplrAuthorized}>
             <h1>Claim your SIENNA</h1>
 
             {false && <h5>Before you can continue you need SCRT in your wallet.</h5>}
@@ -241,8 +236,17 @@ const Claim: React.FC<Props> = ({}) => {
             <ErrorText>{errorMessage}</ErrorText>
           </ClaimBodyLeft>
 
-          {user.isKeplrAuthorized && (
-            <ClaimBodyRight xs="12" sm="12" md="12" lg="6" xl="6">
+          <DummyRightSide
+            xs="12"
+            sm="12"
+            md="12"
+            lg="6"
+            xl="6"
+            $isKeplr={user.isKeplrAuthorized}
+          ></DummyRightSide>
+
+          {user.isKeplrAuthorized ? (
+            <ClaimBodyRight $isKeplr={user.isKeplrAuthorized}>
               <h2>Earn more SIENNA</h2>
 
               <p>
@@ -261,19 +265,15 @@ const Claim: React.FC<Props> = ({}) => {
                 </ViewSienna>
               </div>
             </ClaimBodyRight>
+          ) : (
+            <ClaimBodyRight>&nbsp;</ClaimBodyRight>
           )}
         </ClaimBody>
       )}
 
       {!checkWindowSize() && (
         <ClaimBodyMobile>
-          <ClaimBodyLeftMobile
-            xs="12"
-            sm="12"
-            md="12"
-            lg={user.isKeplrAuthorized ? '6' : '12'}
-            xl={user.isKeplrAuthorized ? '6' : '12'}
-          >
+          <ClaimBodyLeftMobile xs="12" sm="12" md="12" lg="6" xl="6">
             <h1>Claim your SIENNA</h1>
 
             <p>claim.sienna.network are only available on desktop.</p>
@@ -322,6 +322,7 @@ const ClaimContainer = styled.div`
 
 const ClaimTopNavBar = styled(Row)`
   margin: 0;
+  height: 10vh;
 
   @media (max-width: ${(props) => props.theme.breakpoints.lg}) {
     height: auto;
@@ -332,14 +333,27 @@ const ClaimTopNavBar = styled(Row)`
 const ClaimTopNavBarLeft = styled(Col)`
   padding-left: 0;
   background: ${defaultColors.white};
-  transition: 3s;
 `;
 
-const ClaimTopNavBarRight = styled(Col)<{ $isAuthorized?: boolean }>`
+const DummyClaimTopNavBarRight = styled(Col)<{ $isKeplr: boolean }>`
+  background: ${(props) => (props.$isKeplr ? '#fff' : defaultColors.blackStone20)};
+`;
+
+const ClaimTopNavBarRight = styled.div<{ $isAuthorized?: boolean }>`
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: ${(props) => (props.$isAuthorized ? '50%' : '0%')};
+  overflow: hidden;
+
   justify-content: flex-end;
   display: flex;
   padding: 40px 40px 0 0;
   background: ${(props) => (props.$isAuthorized ? '#fff' : defaultColors.white)};
+  height: 10vh;
+
+  transition: 2s;
+  z-index: 10;
 
   @media (max-width: ${(props) => props.theme.breakpoints.sm}) {
     padding: 40px 15px 0 0;
@@ -429,9 +443,7 @@ const ClaimBodyLeft = styled(Col)<{ $darkMode?: boolean; $isKeplr: boolean }>`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: ${(props) => (props.$isKeplr ? 'center' : 'flex-start')};
-  padding-left: ${(props) => (props.$isKeplr ? '0' : '200px')};
-  transition: ${(props) => (props.$isKeplr ? '3s' : '0')};
+  align-items: center;
 
   > h1 {
     font-size: 60px;
@@ -459,13 +471,24 @@ const ClaimBodyLeft = styled(Col)<{ $darkMode?: boolean; $isKeplr: boolean }>`
 }
 `;
 
-const ClaimBodyRight = styled(Col)`
-  padding: 0;
-  height: 100%;
+const DummyRightSide = styled(Col)<{ $isKeplr: boolean }>`
+  background: ${(props) => (props.$isKeplr ? '#fff' : defaultColors.blackStone20)};
+`;
+
+const ClaimBodyRight = styled.div<{ $isKeplr?: boolean }>`
+  position: absolute;
+  width: ${(props) => (props.$isKeplr ? '50%' : '0%')};
+  height: 90vh;
+  top: 10vh;
+  right: 0;
+  overflow: hidden;
+
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  transition: 2s;
+  z-index: 10;
 
   > h2 {
     font-size: 60px;
