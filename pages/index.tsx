@@ -172,7 +172,7 @@ const Claim: React.FC<Props> = ({}) => {
             $isKeplr={user.isKeplrAuthorized}
           ></DummyClaimTopNavBarRight>
 
-          {user.isKeplrAuthorized && (
+          {user.isKeplrAuthorized ? (
             <ClaimTopNavBarRight $isAuthorized={user.isKeplrAuthorized}>
               <span>Balance:</span>
               <UnlockTokenButton onClick={onClickUnlockToken} isUnlock={isUnlock}>
@@ -191,6 +191,8 @@ const Claim: React.FC<Props> = ({}) => {
                 onClose={() => setShowSwapAccountDrawer(false)}
               />
             </ClaimTopNavBarRight>
+          ) : (
+            <ClaimTopNavBarRight>&nbsp;</ClaimTopNavBarRight>
           )}
         </ClaimTopNavBar>
       )}
@@ -349,7 +351,6 @@ const ClaimTopNavBarRight = styled.div<{ $isAuthorized?: boolean }>`
   justify-content: flex-end;
   display: flex;
   padding: 40px 40px 0 0;
-  background: ${(props) => (props.$isAuthorized ? '#fff' : defaultColors.white)};
   height: 10vh;
 
   transition: 2s;
