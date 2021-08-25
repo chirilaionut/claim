@@ -26,8 +26,8 @@ const Notification: React.FC<Props> = ({
     <SwapHolder>
       <Content>
         <>
-          <Title>
-            {isError && <FiAlertTriangle size={28} style={{ marginRight: 8, marginBottom: 14 }} />}
+          <Title style={{ marginBottom: 14 }}>
+            {isError && <FiAlertTriangle size={28} style={{ marginRight: 8 }} />}
             {title}
           </Title>
           <Msg>{msg}</Msg>
