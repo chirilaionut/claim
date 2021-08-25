@@ -175,6 +175,7 @@ const Claim: React.FC<Props> = ({}) => {
           {user.isKeplrAuthorized ? (
             <ClaimTopNavBarRight $isAuthorized={user.isKeplrAuthorized}>
               <span>Balance:</span>
+              {/* <PreLoadIndicator height={14} containerStyle={{}} /> */}
               <UnlockTokenButton onClick={onClickUnlockToken} isUnlock={isUnlock}>
                 {renderBalanceSIENNA()}
               </UnlockTokenButton>
@@ -257,14 +258,15 @@ const Claim: React.FC<Props> = ({}) => {
               </p>
 
               <div style={{ width: '319px', marginBottom: '88px' }}>
-                <ViewSienna
+                {/* <ViewSienna
                   isSwapComplete={afterClaim}
                   onClick={() => {
                     return null;
                   }}
                 >
                   Visit SiennaSwap{' '}
-                </ViewSienna>
+                </ViewSienna> */}
+                <p>Launching soon...</p>
               </div>
             </ClaimBodyRight>
           ) : (
@@ -364,18 +366,18 @@ const ClaimTopNavBarRight = styled.div<{ $isAuthorized?: boolean }>`
   }
 `;
 
-const ViewSienna = styled.button<{ isSwapComplete?: boolean }>`
-  width: 184px;
-  height: 40px;
-  border: 1px solid ${defaultColors.white};
-  background: ${(props) => (props.isSwapComplete ? defaultColors.swapBlue : '#fff')};
-  color: ${(props) => (props.isSwapComplete ? '#fff' : defaultColors.primary)};
-  font-size: 14px;
-  font-weight: 600;
-  border-radius: 20px;
-  cursor: pointer;
-  margin-top: 24px;
-`;
+// const ViewSienna = styled.button<{ isSwapComplete?: boolean }>`
+//   width: 184px;
+//   height: 40px;
+//   border: 1px solid ${defaultColors.white};
+//   background: ${(props) => (props.isSwapComplete ? defaultColors.swapBlue : '#fff')};
+//   color: ${(props) => (props.isSwapComplete ? '#fff' : defaultColors.primary)};
+//   font-size: 14px;
+//   font-weight: 600;
+//   border-radius: 20px;
+//   cursor: pointer;
+//   margin-top: 24px;
+// `;
 
 const ClaimBodyMobile = styled(Row)`
   margin: 0;
@@ -506,6 +508,15 @@ const ClaimBodyRight = styled.div<{ $isKeplr?: boolean }>`
     line-height: 24px;
     width: 320px;
     margin-top: 10px;
+  }
+
+  > div {
+    > p {
+      height: 20px;
+      font-style: italic;
+      margin-top: 19px;
+      font-size: 16px;
+    }
   }
 `;
 
