@@ -280,7 +280,7 @@ const Claim: React.FC<Props> = ({}) => {
           <ClaimBodyLeftMobile xs="12" sm="12" md="12" lg="6" xl="6">
             <h1>Claim your SIENNA</h1>
 
-            <p>claim.sienna.network are only available on desktop.</p>
+            <p>You can only claim on desktop using Chrome or Brave</p>
 
             <NavBarLogo />
           </ClaimBodyLeftMobile>
