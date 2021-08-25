@@ -530,7 +530,7 @@ const UnlockTokenButton = styled.div<{ isUnlock?: boolean }>`
   color: ${(props) => props.theme.colors.text};
   height: 24px;
   font-size: 12px;
-  width: 108px;
+  width: ${(props) => (!props.isUnlock ? 'auto' : '108px')};
   font-weight: 400;
   text-align: center;
   margin-bottom: 14px;
@@ -538,7 +538,7 @@ const UnlockTokenButton = styled.div<{ isUnlock?: boolean }>`
   pointer-events: none;
   display: inline-block;
   cursor: pointer;
-  line-height: 20px;
+  line-height: ${(props) => (!props.isUnlock ? '24px' : '20px')};
 
   -webkit-user-select: none;
   -khtml-user-select: none;
